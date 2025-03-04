@@ -17,7 +17,7 @@ export class CreateUploadService {
       name: file.filename,
       size: file.size,
       key: file.originalname,
-      url: '',
+      url: file.location,
       createdAt: new Date(),
     };
 
