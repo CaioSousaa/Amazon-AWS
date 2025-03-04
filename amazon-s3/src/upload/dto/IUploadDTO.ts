@@ -1,3 +1,3 @@
 export interface IUploadDTO {
-  file: Express.Multer.File;
+  file: Express.MulterS3.File;
 }
