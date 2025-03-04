@@ -4,19 +4,19 @@ import { extname } from 'path';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
 const s3 = new S3Client({
-  region: 'us-east-2',
-  endpoint: 'https://s3.us-east-2.amazonaws.com',
+  region: process.env.AWS_REGION!,
+  endpoint: process.env.AWS_ENDPOINT!,
   forcePathStyle: true,
   credentials: {
-    accessKeyId: String(process.env.AWS_KEY_ACCESS),
-    secretAccessKey: String(process.env.AWS_SECRET_KEY_ACCESS),
+    accessKeyId: process.env.AWS_KEY_ACCESS!,
+    secretAccessKey: process.env.AWS_SECRET_KEY_ACCESS!,
   },
 });
 
 export const multerS3Config: MulterOptions = {
   storage: multerS3({
     s3,
-    bucket: 'uploads3example',
+    bucket: process.env.AWS_BUCKET!,
     acl: 'public-read',
     contentType: (req, file, cb) => multerS3.AUTO_CONTENT_TYPE(req, file, cb),
     key: (req, file, cb) => {
