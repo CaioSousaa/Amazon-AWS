@@ -1,4 +1,4 @@
-enum Status {
+export enum Status {
   pending,
   sent,
   error,
@@ -7,7 +7,8 @@ enum Status {
 interface TaskProps {
   client_id: string;
   status: Status;
-  sentAt: Date;
+  sentAt?: Date;
+  description: string;
   recipient_email: string;
 }
 
@@ -27,12 +28,16 @@ export class Task {
     return this.props.status;
   }
 
-  get sentAt(): Date {
+  get sentAt(): Date | undefined {
     return this.props.sentAt;
   }
 
   get recipient_email(): string {
     return this.props.recipient_email;
+  }
+
+  get description(): string {
+    return this.props.description;
   }
 
   constructor(props: TaskProps, id?: string) {
