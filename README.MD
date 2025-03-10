@@ -30,7 +30,9 @@ Dentro da S3 um objeto é um arquivo e todos os metadados que o descrevem. E ess
 
 - De maneira simples, um bucket é um contêiner para objetos. Para criar um, primeiro você precisa especificar um nome de bucket e uma região AWS. Dentro dele, cada objeto possui uma chave, que é o identificador desse objeto dentro do bucket.
 
-### Descrição do Projeto
+<br>
+
+### Descrição da Aplicação
 
 Este projeto tem como objetivo a implementação de um serviço de upload de arquivos utilizando o Amazon S3 e o NestJS. A aplicação permite que arquivos sejam enviados e armazenados dentro de um bucket na AWS, garantindo escalabilidade, segurança e alta disponibilidade.
 
@@ -44,7 +46,9 @@ Este projeto tem como objetivo a implementação de um serviço de upload de arq
 - Multer
 - Amazon-S3
 
-### Estrutura do Projeto
+<br>
+
+### Estrutura da Aplicação
 
 <pre style="overflow-x: auto; max-width: 1000px; white-space: pre;">
 src/
@@ -67,7 +71,7 @@ src/
 
 </pre>
 
-### Como usar o projeto?
+### Como usar a aplicação?
 
 <br>
 
@@ -84,13 +88,104 @@ src/
 **Instalação:**
 
 - Primeiramente, você deve usar o comando: `git clone https://github.com/CaioSousaa/Amazon-AWS.git` para clonar o projeto na sua máquina.
-
+- Ir para a pasta amazon-s3 acessando o caminho `/amazon-aws/amazon-s3`.
 - Após isso, rode o comando `npm install` para instalar as dependências e gerar a pasta node_modules
 
-<br>
-<br>
 <br>
 
 ### 🚨 ATENÇÃO 🚨
 
-Quando você executar os passos de clonagem, você estará clonando todos os outros projetos dentro do repositório.
+Quando você executar os passos de clonagem, você estará clonando todas as outras aplicações dentro do repositório.
+
+---
+
+### AMAZON-DYNAMODB
+
+O Amazon DynamoDB é um serviço de banco de dados NoSQL com tecnologia sem servidor (serverless) que permite
+o desenvolvimento de aplicações modernas em qualquer escala já que a AWS gerencia automaticamente a infraestrutura
+permitindo que os desenvolvedores foquem no uso do banco sem precisar se preocupar com provisionamento, configuração ou manutenção de servidores.
+
+<br>
+
+### Descrição da Aplicação
+
+Para explorar e usar operações de escrita e leitura dentro do DynamoDb de maneira eficiente,
+decidi criar uma aplicação que envia de maneira automática e-mails para tasks ainda pendentes.
+
+Primeiro é necessário criar um cliente, no qual ele vai registrar as tasks, passando descrição e
+o email de quem vai receber essa task. Crie um serviço de envio de e-mails utilizando
+a biblioteca <b><a href="https://www.nodemailer.com/">Nodemailer</a></b>, e para o envio automático dos e-mails usei o <b><a href="https://docs.nestjs.com/techniques/task-scheduling">Task scheduling</a></b>
+que possui integração direta como Nest.js, onde com ele você pode agendar tarefas em horários ou datas fixas.
+
+### Tecnologias usadas
+
+- Node.js
+- Nest.js
+- DynamoDB
+- Nodemailer
+- Typescript
+- Task Scheduling
+- Docker-Compose
+- Terraform
+
+### Estrutura da Aplicação
+
+<pre style="overflow-x: auto; max-width: 1000px; white-space: pre;">
+src/
+│── app/
+│   ├── app.module.ts
+│
+│── config/
+│   ├── DynamoConfig.ts
+│
+│── infra/
+│   ├── database/
+│   │   ├── dynamo/
+│   │   │   ├── .terraform/
+│   │   │   ├── .terraform.lock.hcl
+│   │   │   ├── main.tf
+│   │   │   ├── terraform.tfstate
+│   │   │   ├── terraform.tfstate.backup
+│
+│── modules/
+│   ├── client/
+│   │   ├── adapters/
+│   │   ├── domain/
+│   │   ├── dto/
+│   │   ├── services/
+│   │   ├── client.module.ts
+│   │
+│   ├── mail/
+│   │   ├── service/
+│   │   ├── templates/
+│   │   ├── mail.module.ts
+│   │
+│   ├── task/
+│   │   ├── adapters/
+│   │   ├── domain/
+│   │   ├── dto/
+│   │   ├── service/
+│   │   ├── task.module.ts
+│
+│── main.ts
+</pre>
+
+### Como usar a aplicação?
+
+<br>
+
+**Pré-requisitos:**
+
+- Ter o Terraform instalado na sua maquina para provisionar a infraestrutura do DynamoDb.
+
+**Instalação:**
+
+- Primeiramente, você deve usar o comando: `git clone https://github.com/CaioSousaa/Amazon-AWS.git` para clonar o projeto na sua máquina.
+- Ir para a pasta amazon-dynamodb acessando o caminho `/amazon-aws/amazon-dynamodb`.
+- Após isso, rode o comando `npm install` para instalar as dependências e gerar a pasta node_modules
+
+<br>
+
+### 🚨 ATENÇÃO 🚨
+
+Quando você executar os passos de clonagem, você estará clonando todas as outras aplicações dentro do repositório.
