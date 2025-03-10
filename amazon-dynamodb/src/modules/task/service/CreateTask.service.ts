@@ -19,7 +19,7 @@ export class CreateTaskService {
       {
         recipient_email,
         description,
-        status: Status.error,
+        status: Status.pending,
         client_id,
       },
       uuidv4(),
