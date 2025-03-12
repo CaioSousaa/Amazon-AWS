@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" 
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  cpf       String   @unique
+  age       Int
+  createdAt DateTime @default(now())
+  payments  Payment[]
+
+  @@map("customer")
+}
+
+model Payment {
+  id          String   @id @default(uuid())
+  customer_id String
+  product_id  String
+  createdAt   DateTime @default(now())
+
+  customer    Customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@map("payment")
+}
+
+model Product {
+  id           String   @id @default(uuid())
+  description  String
+  priceInCents Int
+  payments     Payment[]
+
+  @@map("product")
+}
