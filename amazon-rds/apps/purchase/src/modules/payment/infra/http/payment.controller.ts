@@ -7,10 +7,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import {
-  CustomerPaysProductService,
-  IResponse,
-} from '../../services/CustomerPaysProduct.service';
+import { CustomerPaysProductService } from '../../services/CustomerPaysProduct.service';
 import { CreatePaymentDTO } from '../../dto/CreatePaymentDTO';
 
 @Controller('api/purchase/payment')
@@ -20,7 +17,7 @@ export class PaymentController {
   @Post()
   @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() request: CreatePaymentDTO): Promise<IResponse> {
+  async create(@Body() request: CreatePaymentDTO) {
     return this.customerPaysProductService.execute(request);
   }
 }

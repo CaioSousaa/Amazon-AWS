@@ -5,6 +5,8 @@ import { PaymentPrismaRepository } from 'src/external/repositories/PaymentPrisma
 import { CustomerPrismaRepository } from 'src/external/repositories/CustomerPrismaRepository';
 import { ProductPrismaRepository } from 'src/external/repositories/ProductPrismaRepository';
 import { PaymentController } from './infra/http/payment.controller';
+import { PurchaseService } from '../kafka/services/kafka.service';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({})
 export class PaymentModule {
@@ -12,8 +14,26 @@ export class PaymentModule {
     return {
       module: PaymentModule,
       controllers: [PaymentController],
-      imports: [ConfigModule.forRoot()],
+      imports: [
+        ConfigModule.forRoot(),
+        ClientsModule.register([
+          {
+            name: 'PURCHASE_SERVICE',
+            transport: Transport.KAFKA,
+            options: {
+              client: {
+                clientId: 'purchase-service',
+                brokers: ['localhost:9092'],
+              },
+              consumer: {
+                groupId: 'amazon-rds',
+              },
+            },
+          },
+        ]),
+      ],
       providers: [
+        PurchaseService,
         PaymentPrismaRepository,
         CustomerPrismaRepository,
         ProductPrismaRepository,

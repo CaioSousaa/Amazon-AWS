@@ -7,23 +7,8 @@ import { ICustomerPortRepository } from 'src/modules/customer/port/ICustomerPort
 import { ProductPrismaRepository } from 'src/external/repositories/ProductPrismaRepository';
 import { IProductPortRepository } from 'src/modules/product/port/IProductPortRepository';
 import { Payment } from '../domain/entitie/Payment';
+import { PurchaseService } from '../../kafka/services/kafka.service';
 import Stripe from 'stripe';
-
-export interface IResponse {
-  customer: {
-    customer_id: string;
-    name: string;
-    cpf: string;
-  };
-  product: {
-    product_id: string;
-    priceInCents: number;
-  };
-  payment: {
-    payment_id: string;
-  };
-  appointmentDate: Date;
-}
 
 @Injectable()
 export class CustomerPaysProductService {
@@ -37,6 +22,7 @@ export class CustomerPaysProductService {
     @Inject(ProductPrismaRepository)
     private productRepository: IProductPortRepository,
     @Inject('STRIPE_SECRET_KEY') private readonly apiKey: string,
+    private readonly purchaseService: PurchaseService,
   ) {
     this.stripe = new Stripe(this.apiKey, {
       apiVersion: '2025-02-24.acacia',
@@ -48,17 +34,15 @@ export class CustomerPaysProductService {
     paymentInCents,
     product_id,
     cpf,
-  }: CreatePaymentDTO): Promise<IResponse> {
+  }: CreatePaymentDTO): Promise<void> {
     const customerExists = await this.customerRepository.findByCpf(cpf);
-
     if (!customerExists) {
-      throw new NotAcceptableException('invalid CPF or non-existent customer');
+      throw new NotAcceptableException('Invalid CPF or non-existent customer');
     }
 
     const productExists = await this.productRepository.findById(product_id);
-
     if (!productExists) {
-      throw new NotAcceptableException('the product does not exist');
+      throw new NotAcceptableException('The product does not exist');
     }
 
     if (paymentInCents < productExists.priceInCents) {
@@ -76,11 +60,11 @@ export class CustomerPaysProductService {
       name: customerExists.name,
     });
 
-    return {
+    const purchaseEvent = {
       customer: {
         customer_id: customerExists.id!,
         name: customerExists.name,
-        cpf: customerExists.name,
+        cpf: customerExists.cpf,
       },
       product: {
         product_id: productExists.id,
@@ -91,5 +75,8 @@ export class CustomerPaysProductService {
       },
       appointmentDate,
     };
+
+    console.log(`[PURCHASE] Dispatching event through PurchaseService...`);
+    await this.purchaseService.sendPurchaseEvent(purchaseEvent);
   }
 }
