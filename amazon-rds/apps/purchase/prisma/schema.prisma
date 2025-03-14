@@ -31,7 +31,7 @@ model Payment {
 }
 
 model Product {
-  id           String   @id @default(uuid())
+  id           String   @id
   description  String
   priceInCents Int
   payments     Payment[]

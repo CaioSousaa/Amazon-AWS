@@ -9,9 +9,10 @@ export class ProductPrismaRepository implements IProductPortRepository {
     return customer!;
   }
 
-  async create({ description, priceInCents }: Product): Promise<Product> {
+  async create({ description, priceInCents, id }: Product): Promise<Product> {
     const newProduct = await prisma.product.create({
       data: {
+        id,
         description,
         priceInCents,
       },
@@ -23,21 +24,5 @@ export class ProductPrismaRepository implements IProductPortRepository {
     const allProducts = await prisma.product.findMany();
 
     return allProducts;
-  }
-
-  async updatedProduct(
-    id: string,
-    description?: string,
-    priceInCents?: number,
-  ): Promise<Product> {
-    const updatedProduct = await prisma.product.update({
-      where: { id },
-      data: {
-        description,
-        priceInCents,
-      },
-    });
-
-    return updatedProduct;
   }
 }
