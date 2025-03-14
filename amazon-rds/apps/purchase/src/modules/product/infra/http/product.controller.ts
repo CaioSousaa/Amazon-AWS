@@ -1,25 +1,19 @@
 import {
-  Body,
   ClassSerializerInterceptor,
   Controller,
   Get,
-  Param,
   Post,
-  Put,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateProductService } from '../../services/CreateProduct.service';
-import { IUpdateproductDTO } from '../../dto/IUpdateProductDTO';
-import { UpdateProductService } from '../../services/UpdateProduct.service';
 import { FindAllProductsService } from '../../services/FindAllProducts.service';
 
 @Controller('api/purchase/product')
 export class ProductController {
   constructor(
     private createProductService: CreateProductService,
-    private updateProductService: UpdateProductService,
     private findAllProductsService: FindAllProductsService,
   ) {}
 
@@ -28,11 +22,6 @@ export class ProductController {
   @UseInterceptors(ClassSerializerInterceptor)
   async create() {
     return this.createProductService.execute();
-  }
-
-  @Put(':id')
-  async updated(@Body() request: IUpdateproductDTO, @Param('id') id: string) {
-    return this.updateProductService.execute(request, id);
   }
 
   @Get('all')
