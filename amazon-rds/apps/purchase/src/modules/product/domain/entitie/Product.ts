@@ -1,14 +1,14 @@
 export class Product {
-  id?: string;
+  id: string;
   description: string;
   priceInCents: number;
 
-  constructor({ description, priceInCents }: Product) {
-    Object.assign(this, { description, priceInCents });
+  constructor({ id, description, priceInCents }: Product) {
+    Object.assign(this, { id, description, priceInCents });
   }
 
-  static create({ description, priceInCents }: Product) {
-    const product = new Product({ description, priceInCents });
+  static create({ id, description, priceInCents }: Product) {
+    const product = new Product({ id, description, priceInCents });
 
     return product;
   }
