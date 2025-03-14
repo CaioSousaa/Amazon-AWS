@@ -2,7 +2,6 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { CreateProductService } from './services/CreateProduct.service';
 import { ProductPrismaRepository } from 'src/external/repositories/ProductPrismaRepository';
 import { ProductController } from './infra/http/product.controller';
-import { UpdateProductService } from './services/UpdateProduct.service';
 import { FindAllProductsService } from './services/FindAllProducts.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -21,7 +20,6 @@ export class ProductModule {
             configService.get('STRIPE_SECRET_KEY'),
           inject: [ConfigService],
         },
-        UpdateProductService,
         ProductPrismaRepository,
         FindAllProductsService,
       ],
