@@ -189,3 +189,96 @@ src/
 ### 🚨 ATENÇÃO 🚨
 
 Quando você executar os passos de clonagem, você estará clonando todas as outras aplicações dentro do repositório.
+
+---
+
+### AMAZON-RDS
+
+O Amazon RDS (Relational Database Service) é um serviço gerenciado de banco de dados relacional da AWS que facilita a configuração, operação e escalabilidade de bancos de dados na nuvem. Ele suporta vários mecanismos populares, como MySQL, PostgreSQL, MariaDB, Oracle e SQL Server, permitindo que os desenvolvedores foquem no uso do banco sem se preocupar com provisionamento, configuração ou manutenção de servidores.
+
+A AWS gerencia automaticamente tarefas como backups, atualizações de software, replicação e failover, garantindo alta disponibilidade e desempenho escalável para aplicações modernas.
+
+<br>
+
+### Descrição da Aplicação
+
+Para explorar e utilizar operações de banco de dados relacional de maneira eficiente, decidi criar uma arquitetura baseada em microserviços utilizando o Amazon RDS e o <b><a href="https://kafka.apache.org/">Kafka.</a></b>
+
+Criei dois bancos de dados separados: um para o serviço de purchase e outro para o serviço de reserve. No serviço de purchase, o cliente realiza a compra de um produto utilizando o <b><a href="https://stripe.com/br">Stripe</a></b> para simular o pagamento. Assim que a compra é concluída, um evento é enviado para um tópico Kafka, que será consumido pelo serviço de reserve.
+
+O reserve escuta esse evento e registra automaticamente um agendamento com base na compra realizada, garantindo que o cliente tenha um horário reservado. Para isso, utilizei o Kafka para comunicação assíncrona entre os serviços, garantindo escalabilidade e desacoplamento entre as operações.
+
+### Tecnologias usadas
+
+- Node.js
+- Nest.js
+- RDS
+- Kafka
+- Typescript
+- Stripe
+- Docker-Compose
+
+### Estrutura da Aplicação
+
+<pre style="overflow-x: auto; max-width: 1000px; white-space: pre;">
+apps/
+└── purchase/
+    ├── dist/                   # Código compilado (gerado pelo NestJS ao buildar)
+    ├── node_modules/           # Dependências do projeto
+    ├── prisma/                 # Configurações do Prisma ORM (migrations, schema, etc.)
+    ├── src/                    # Código-fonte principal
+    │   ├── app/                
+    │   │   └── app.module.ts   # Módulo principal da aplicação
+    │   ├── external/           # Código relacionado a integrações externas (ex: repositórios)
+    │   │   ├── repositories/   # Implementações de repositórios (Prisma, API externa, etc.)
+    │   ├── infra/              # Código relacionado à infraestrutura
+    │   │   └── database/       
+    │   │       └── prisma/     # Configuração do Prisma ORM
+    │   ├── modules/            # Módulos da aplicação
+    │   │   ├── customer/       # Módulo de clientes
+    │   │   ├── kafka/          # Módulo de integração com Kafka
+    │   │   ├── payment/        # Módulo de pagamentos
+    │   │   ├── product/        # Módulo de produtos
+    │   ├── main.ts             # Arquivo principal que inicia a aplicação NestJS
+
+</pre>
+
+<pre style="overflow-x: auto; max-width: 1000px; white-space: pre;">
+apps/
+└── reserve/
+    ├── dist/                   # Código compilado
+    ├── node_modules/           # Dependências do projeto
+    ├── prisma/                 # Configuração do Prisma ORM
+    │   ├── migrations/         # Migrations do banco de dados
+    │   ├── schema.prisma       # Definição do banco de dados Prisma
+    ├── src/                    # Código-fonte principal
+    │   ├── app/                
+    │   │   └── app.module.ts   # Módulo principal da aplicação
+    │   ├── external/           # Código relacionado a integrações externas (repositórios)
+    │   │   ├── repositories/   # Implementação de repositórios
+    │   ├── infra/              # Infraestrutura do projeto
+    │   │   └── database/       # Configuração do banco de dados
+    │   ├── modules/            # Módulos do domínio
+    │   │   ├── appointment/    # Módulo de agendamentos
+    │   │   ├── customer/       # Módulo de clientes
+    │   │   ├── scheduling/     # Módulo de gerenciamento de horários
+    │   ├── main.ts             # Arquivo principal que inicia a aplicação NestJS
+
+
+</pre>
+
+### Como usar a aplicação?
+
+<br>
+
+**Instalação:**
+
+- Primeiramente, você deve usar o comando: `git clone https://github.com/CaioSousaa/Amazon-AWS.git` para clonar o projeto na sua máquina.
+- Ir para a pasta amazon-dynamodb acessando o caminho `/amazon-aws/amazon-rds`.
+- Após isso, rode o comando `npm install` para instalar as dependências e gerar a pasta node_modules
+
+<br>
+
+### 🚨 ATENÇÃO 🚨
+
+Quando você executar os passos de clonagem, você estará clonando todas as outras aplicações dentro do repositório.
