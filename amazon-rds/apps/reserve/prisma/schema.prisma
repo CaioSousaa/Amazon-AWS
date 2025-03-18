@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id      String   @id 
+  name    String
+  cpf     String   @unique
+
+  schedulings Scheduling[]
+}
+
+model AppointmentDate {
+  id        String   @id @default(uuid())
+  day       Int
+  month     Int
+  year      Int
+  hours     Int
+  createdAt DateTime @default(now())
+  schedulings Scheduling[]
+}
+
+model Scheduling {
+  id                 String   @id @default(uuid())
+  customer_id        String
+  appointmentDate_id String
+  createdAt          DateTime @default(now())
+  customer          Customer        @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  appointmentDate   AppointmentDate  @relation(fields: [appointmentDate_id], references: [id], onDelete: Cascade)
+}

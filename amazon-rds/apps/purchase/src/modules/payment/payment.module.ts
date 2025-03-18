@@ -26,7 +26,7 @@ export class PaymentModule {
                 brokers: ['localhost:9092'],
               },
               consumer: {
-                groupId: 'amazon-rds',
+                groupId: 'purchase-group',
               },
             },
           },
